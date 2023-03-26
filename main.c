@@ -11,8 +11,7 @@ struct circle {
     struct point point;
     double r;
 };
-int Check_Error(char* str)
-{
+int Check_Error(char* str) {
     if (!(strncmp("circle", str, 6))) {
         if (!(isdigit(*(strchr(str, '(') + 1)))
             && !(*(strchr(str, '(') + 1) == '-')
@@ -35,40 +34,52 @@ int Check_Error(char* str)
             printf("Error at column %ld: expected \'double\'\n\n",
                    strchr(str, ' ') - &str[0] + 1);
             return 0;
-        }
-        if (!(isdigit(*(strchr(str, ',') + 2)))
-            && !(*(strchr(str, ',') + 1) == '+')) {
-            printf("%s", str);
-            for (int i = 0; i < (strchr(str, ',') - &str[0] + 2); i++)
-                printf(" ");
-            printf("^\n");
-            printf("Error at column %ld: expected \'double\'\n\n",
-                   strchr(str, ',') - &str[0] + 1);
-            return 0;
-        }
-        if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
-            printf("%s", str);
-            for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
-                printf(" ");
-            printf("^\n");
-            printf("Error at column %ld: radius cant be \'0\' or "
-                   "negative "
-                   "value\n\n",
-                   strchr(str, ',') - &str[0] + 2);
-            return 0;
-        } else
-            return 1;
-    } else {
+        } else 
+            return 1; }
+    else {
         printf("%s \n^\n", str);
         printf("Error at column 0: expected \'circle\'\n\n");
         return 0;
     }
 }
+int Check_Error1(char* str) {
+if (!(strncmp("circle", str, 6))) {
+    if (!(isdigit(*(strchr(str, ',') + 2)))
+        && !(*(strchr(str, ',') + 1) == '+')) {
+        printf("%s", str);
+        for (int i = 0; i < (strchr(str, ',') - &str[0] + 2); i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: expected \'double\'\n\n",
+               strchr(str, ',') - &str[0] + 1);
+        return 0;
+    }
+    if (strtod(strchr(str, ',') + 1, NULL) <= 0) {
+        printf("%s", str);
+        for (int i = 0; i < strchr(str, ',') - &str[0] + 2; i++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %ld: radius cant be \'0\' or "
+               "negative "
+               "value\n\n",
+               strchr(str, ',') - &str[0] + 2);
+        return 0;
+    } else 
+            return 1; }
+            
+    else {
+        printf("%s \n^\n", str);
+        printf("Error at column 0: expected \'circle\'\n\n");
+        return 0;
+    }
+}
+
+
 int main(int argc, char** argv)
 {
     struct circle* circle;
     int nCircle = 0;
-    int code;
+    int code, code1;
     float SR, D;
     double P, S;
     char str[100];
@@ -82,6 +93,18 @@ int main(int argc, char** argv)
         if (!code)
             continue;
         if (code) {
+            nCircle++;
+            circle = realloc(circle, nCircle * (sizeof(struct circle)));
+            circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
+            circle[nCircle - 1].point.y = strtod(strchr(str, ' ') + 1, NULL);
+            circle[nCircle - 1].r = strtod(strchr(str, ',') + 1, NULL);
+        }
+    }
+    while (fgets(str, 100, data) != NULL) {
+        code1 = Check_Error1(str);
+        if (!code1)
+            continue;
+        if (code1) {
             nCircle++;
             circle = realloc(circle, nCircle * (sizeof(struct circle)));
             circle[nCircle - 1].point.x = strtod(strchr(str, '(') + 1, NULL);
